@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button, Form, Grid, Header, Segment} from 'semantic-ui-react'
 
-function Login({user:{username, mobileNumber}, setUser}) {
+function Login({user:{username, mobileNumber, verificationCode, verificationSent}, setUser, sendSmsCode, sendVerificationCode}) {
     function populateFields(event, data){
         setUser(draft => {
             draft[data.name] = data.value;
@@ -14,7 +14,7 @@ function Login({user:{username, mobileNumber}, setUser}) {
                     <Header 
                         as='h2' 
                         color='teal' 
-                        textAlign='centre'
+                        textAlign='center'
                     >
                         Log into your account
                     </Header>
@@ -37,11 +37,22 @@ function Login({user:{username, mobileNumber}, setUser}) {
                                 onChange={(event, data) => populateFields(event, data)} 
                                 name="mobileNumber"
                             />
+                            {verificationSent && (
+                            <Form.Input
+                                fluid
+                                icon='key'
+                                iconPosition='left'
+                                placeholder='Enter your code'
+                                value={verificationCode}
+                                onChange={(event, data) => populateFields(event, data)}
+                                name='verificationCode'
+                            />)} 
                             <Button 
                                 color='teal' 
                                 fluid size='large'
+                                onClick={!verificationSent ? sendSmsCode : sendVerificationCode}
                             >
-                                Login/Signup
+                                {!verificationSent ? 'Login/Signup' : 'Enter your code'}
                             </Button>
                         </Segment>
                     </Form>
